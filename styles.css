@@ -214,39 +214,6 @@ body.light-mode .terminal, body.light-mode .exp-card, body.light-mode .cert-card
     box-shadow: 0 0 20px rgba(0,170,0,0.3);
 }
 
-/* Mobile */
-@media (max-width: 768px) {
-    .nav-links {
-        position: absolute;
-        right: 0;
-        top: 70px;
-        background: #111;
-        flex-direction: column;
-        width: 50%;
-        transform: translateX(100%);
-        transition: transform 0.5s ease-in;
-        padding: 40px 0;
-        box-shadow: -10px 0 20px rgba(0,255,0,0.3);
-    }
-
-    .nav-links li {
-        opacity: 0;
-        margin: 20px 0;
-        text-align: center;
-    }
-
-    .nav-active { transform: translateX(0%); }
-
-    .burger { display: block; }
-}
-
-/* Desktop nav reset */
-@media (min-width: 769px) {
-    .nav-links { position: static; transform: none; flex-direction: row; background: none; }
-    .nav-links li { opacity: 1; }
-    .burger { display: none; }
-}
-
 footer {
     padding: 40px;
     text-align: center;
@@ -254,6 +221,76 @@ footer {
 }
 
 footer a { color: #0f0; }
+
+/* =============== MOBILE MENU FIX =============== */
+@media (max-width: 768px) {
+    .burger {
+        display: block;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 70px;
+        right: 0;
+        height: calc(100vh - 70px);
+        width: 70%;
+        background: #111;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        transform: translateX(100%);
+        transition: transform 0.4s ease-in-out;
+        padding-top: 60px;
+        box-shadow: -15px 0 30px rgba(0, 255, 0, 0.5);
+        z-index: 999;
+    }
+
+    .nav-links li {
+        opacity: 0;
+        margin: 25px 0;
+    }
+
+    .nav-links a {
+        font-size: 22px;
+        padding: 10px 20px;
+        display: block;
+    }
+
+    /* When menu is open */
+    .nav-active {
+        transform: translateX(0);
+    }
+
+    .nav-active li {
+        opacity: 1;
+        animation: navLinkFade 0.5s ease forwards;
+    }
+}
+
+/* Desktop: always show menu */
+@media (min-width: 769px) {
+    .nav-links {
+        position: static;
+        transform: none;
+        flex-direction: row;
+        background: none;
+        width: auto;
+        height: auto;
+        padding: 0;
+        box-shadow: none;
+    }
+
+    .nav-links li {
+        opacity: 1;
+        animation: none;
+    }
+
+    .burger {
+        display: none;
+    }
+}
+
+/* Fade animation for mobile links */
 @keyframes navLinkFade {
     from {
         opacity: 0;
@@ -265,12 +302,13 @@ footer a { color: #0f0; }
     }
 }
 
-/* Ensure links are visible when menu is open */
-.nav-links li {
-    opacity: 0; /* Start hidden for animation */
-    transition: opacity 0.3s ease;
+/* Burger to X */
+.toggle .line1 {
+    transform: rotate(-45deg) translate(-5px, 6px);
 }
-
-.nav-active .nav-links li {
-    opacity: 1;
+.toggle .line2 {
+    opacity: 0;
+}
+.toggle .line3 {
+    transform: rotate(45deg) translate(-5px, -6px);
 }
