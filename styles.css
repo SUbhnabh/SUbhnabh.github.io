@@ -436,3 +436,113 @@ body.light-mode .theme-toggle label {
 body * {
     transition: background-color 0.4s, color 0.4s, border-color 0.4s, box-shadow 0.4s;
 }
+/* New Clear Experience Layout */
+.experience-section {
+    padding: 120px 20px 60px;
+}
+
+.section-subtitle {
+    color: #0f0;
+    font-size: 20px;
+    margin-bottom: 40px;
+    opacity: 0.8;
+}
+
+.exp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.exp-card {
+    background: #111;
+    border: 1px solid #0f0;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+    transition: all 0.4s ease;
+}
+
+.exp-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.4);
+}
+
+.exp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.exp-header h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.exp-date {
+    color: #0f0;
+    font-size: 18px;
+    opacity: 0.9;
+    white-space: nowrap;
+}
+
+.exp-card h3 {
+    color: #0f0;
+    margin: 10px 0 20px;
+    font-size: 20px;
+}
+
+.exp-bullets {
+    list-style: none;
+    padding-left: 0;
+    text-align: left;
+}
+
+.exp-bullets li {
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+.exp-bullets li::before {
+    content: ">";
+    color: #0f0;
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+}
+
+/* Light Mode Adjustments */
+body.light-mode .exp-card {
+    background: #f0f0f0;
+    border-color: #0a0;
+    box-shadow: 0 0 20px rgba(0, 170, 0, 0.2);
+}
+
+body.light-mode .exp-card:hover {
+    box-shadow: 0 0 30px rgba(0, 170, 0, 0.4);
+}
+
+body.light-mode .exp-bullets li::before {
+    color: #0a0;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .exp-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .exp-header {
+        flex-direction: column;
+    }
+
+    .exp-date {
+        margin-top: 10px;
+    }
+}
