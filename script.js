@@ -1,39 +1,33 @@
-// Mobile Navigation
-const navSlide = () => {
-    const burger = document.querySelector('.burger');
-    const nav = document.querySelector('.nav-links');
-    const navLinks = document.querySelectorAll('.nav-links li');
+// Mobile menu
+const burger = document.querySelector('.burger');
+const navLinks = document.querySelector('.nav-links');
+const links = document.querySelectorAll('.nav-links li');
 
-    burger.addEventListener('click', () => {
-        nav.classList.toggle('nav-active');
+burger.addEventListener('click', () => {
+    navLinks.classList.toggle('nav-active');
 
-        navLinks.forEach((link, index) => {
-            if (link.style.animation) {
-                link.style.animation = '';
-            } else {
-                link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`;
-            }
-        });
-
-        burger.classList.toggle('toggle');
+    links.forEach((link, index) => {
+        if (link.style.animation) {
+            link.style.animation = '';
+        } else {
+            link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`;
+        }
     });
-}
 
-navSlide();
+    burger.classList.toggle('toggle');
+});
 
-// Dark/Light Mode Toggle
+// Dark/Light Mode
 const toggleSwitch = document.querySelector('#theme-switch');
 const currentTheme = localStorage.getItem('theme');
 
 if (currentTheme) {
     document.body.classList.add(currentTheme);
-    if (currentTheme === 'light-mode') {
-        toggleSwitch.checked = true;
-    }
+    toggleSwitch.checked = currentTheme === 'light-mode';
 }
 
-toggleSwitch.addEventListener('change', (e) => {
-    if (e.target.checked) {
+toggleSwitch.addEventListener('change', () => {
+    if (toggleSwitch.checked) {
         document.body.classList.add('light-mode');
         localStorage.setItem('theme', 'light-mode');
     } else {
