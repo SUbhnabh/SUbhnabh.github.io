@@ -39,7 +39,7 @@
         <h1>Contact</h1>
         <p>Available for professional penetration testing engagements</p>
 
-        <form class="contact-form" action="https://api.web3forms.com/submit" method="POST" id="contactForm">
+        <form class="contact-form" action="https://api.web3forms.com/submit" method="POST" id="contactForm" novalidate>
             <input type="hidden" name="access_key" value="8353674e-7bbd-482f-a002-c60dd3821072">
             <input type="hidden" name="subject" value="New Contact Message from Portfolio">
 
@@ -64,50 +64,40 @@
 
     <script src="script.js"></script>
 
-    <!-- Modern XSS Protection using DOMPurify (Industry Standard) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+    <!-- Clean validation: Only notify user about disallowed characters (does NOT strip) -->
     <script>
-        // Clean and safe configuration
-        const PURIFY_CONFIG = {
-            ALLOWED_TAGS: [],                  // Strip all HTML tags
-            ALLOWED_ATTR: [],                  // No attributes allowed
-            KEEP_CONTENT: true,                // Keep text content
-            ADD_TAGS: [],                      // No extra tags
-            ADD_ATTR: [],
-            FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'style'],
-            SAFE_FOR_TEMPLATES: true
-        };
-
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             const nameField = document.getElementById('name');
             const messageField = document.getElementById('message');
 
-            // Sanitize Name: Only allow letters, spaces, hyphens, apostrophes, periods
-            const cleanName = nameField.value
-                .replace(/[^a-zA-Z\s\-\'\.]/g, '')
-                .trim()
-                .substring(0, 50);
+            let hasError = false;
+            let errorMessage = 'The following characters are not allowed:\n';
 
-            if (cleanName.length < 2) {
-                alert('Please enter a valid name (letters and basic punctuation only).');
-                e.preventDefault();
-                return;
-            }
-            nameField.value = cleanName;
-
-            // Sanitize Message using DOMPurify (neutralizes ALL known XSS vectors)
-            const dirtyMessage = messageField.value;
-            const cleanMessage = DOMPurify.sanitize(dirtyMessage, PURIFY_CONFIG);
-
-            // Additional safety: block if sanitization removed too much (likely malicious)
-            if (cleanMessage.length < dirtyMessage.length * 0.7) {
-                alert('Your message contains invalid or unsafe content. Please use plain text only.');
-                e.preventDefault();
-                return;
+            // Disallowed characters for Name
+            const nameDisallowed = nameField.value.match(/[^a-zA-Z\s\-\'\.\,]/g);
+            if (nameDisallowed) {
+                hasError = true;
+                errorMessage += 'Name field: ' + [...new Set(nameDisallowed)].join(' ') + '\n';
             }
 
-            // Limit excessive newlines
-            messageField.value = cleanMessage.replace(/\n{5,}/g, '\n\n\n\n').trim();
+            // Disallowed characters for Message (dangerous/special chars)
+            const messageDisallowed = messageField.value.match(/[<>`'"&;]/g);
+            if (messageDisallowed) {
+                hasError = true;
+                errorMessage += 'Message field: ' + [...new Set(messageDisallowed)].join(' ') + '\n';
+            }
+
+            // Also block javascript: attempts in Message
+            if (/javascript\s*:/i.test(messageField.value)) {
+                hasError = true;
+                errorMessage += 'Message field: "javascript:" is not allowed.\n';
+            }
+
+            if (hasError) {
+                alert(errorMessage + '\nPlease remove these characters and use plain text only.');
+                e.preventDefault(); // Stop submission
+            }
+            // If no disallowed characters → form submits normally (Web3Forms will receive original input)
         });
     </script>
 </body>
